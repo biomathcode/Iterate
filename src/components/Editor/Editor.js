@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Editor from 'rich-markdown-editor';
-import {debounce} from 'lodash-es';
+import {countBy, debounce} from 'lodash-es';
 import removeMd from 'remove-markdown';
 import _ from 'lodash-es';
 import Layout from '../Layout/Layout';
-
+import * as dayjs from 'dayjs';
+import {gql, useMutation} from '@apollo/client';
 import {Box} from 'grommet';
 
+import { useParams } from "react-router";
+
 import './editor.css';
+import { GlobalContext } from '../../contexts/GlobalContext/globalcontext';
+
+const UPDATE_JOURNAL = gql`
+  mutation UpdateJournal($id: String!, $content: String, $count: Float, $completed: Boolean) {
+    updateJournal(id: $id, content: $content, count: $count, completed:$completed ){
+      content
+    }
+  }
+`
+
 
 const savedText = localStorage.getItem('saved');
 const exampleText = ``
@@ -21,6 +34,28 @@ const FunctionMarkdownEditor = (props) => {
   const [template, setTemplate] = useState(false)
   const [dark, setDark] = useState(localStorage.getItem('dark') === "enabled")
   const [value, setValue]= useState(undefined);
+
+  const {journalList} = useContext(GlobalContext);
+
+  //getting the query id
+  let {id} = useParams();
+
+  const count = cleanWord.length
+  const [updateJournal] = useMutation(UPDATE_JOURNAL, {
+    onCompleted:(data) => {console.log("Saved", data)}
+  });
+  useEffect(() => {
+    if (count >= 1) {
+      updateJournal({
+        variables: {
+          id: id,
+          content: word,
+          count: count,
+          completed: true
+        }
+      })
+    }
+  }, [count]);
 
   const handleToggleReadOnly = () => {
     setreadonly(!readOnly);
@@ -114,7 +149,14 @@ const FunctionMarkdownEditor = (props) => {
             paste: () => console.log("PASTE"),
             touchstart: () => console.log("TOUCH START"),
           }}
-          onSave={options => console.log("Save triggered", options)}
+          onSave={options => updateJournal({
+            variables: {
+              id: id,
+              content: word,
+              count: count,
+              completed: true
+            }
+          })}
           onCancel={() => console.log("Cancel triggered")}
           onChange={handleChange}
           onClickLink={(href, event) =>
