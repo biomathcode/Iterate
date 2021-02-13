@@ -29,7 +29,7 @@ const SidebarFooter = () => (
 const MainNavigation = () => {
   const history = useHistory();
   return (
-    <Nav gap="small">
+  <Nav gap="small" >
     <Button icon={<Dashboard />} onClick={() => history.push("/dashboard")} />
     <Button icon={<Edit />} onClick={() => history.push('/Editor')}/>
     <Box pad="small" border={{ color: "white", side: "bottom" }} />

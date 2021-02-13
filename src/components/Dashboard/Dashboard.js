@@ -3,12 +3,27 @@ import React, { useState, useContext } from 'react';
 import { AuthContext} from '../../contexts/AuthContext/AuthContext';
 import {GlobalContext} from '../../contexts/GlobalContext/globalcontext';
 
+import {useParams} from 'react-router-dom';
+
 import {Box, Clock, Calendar,Button, Avatar, Text, Heading, } from 'grommet';
 import Layout from '../Layout/Layout';
 import { Add,BladesHorizontal } from 'grommet-icons';
 import { useHistory } from 'react-router-dom';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import './Dashboard.css';
 
+import * as dayjs from 'dayjs';
+
+//getting the query
+const GET_JOURNAL_BY_USER = gql`
+  query getJournalByUser($googleId: String!){
+      journalsByuser(googleId: $googleId) {
+        createdAt,
+        completed,
+        id
+      } 
+  }
+`
 
 
 
@@ -24,14 +39,21 @@ const ADD_JOURNAL = gql`
     }
 `
 
-export default function Dashboard(props) {
+export default function Dashboard() {
 
+    // const [refresh, setRefresh] = useState(false);
     const {UserLogOut} = useContext(AuthContext);
     const {addJournal} = useContext(GlobalContext);
 
     const user = JSON.parse(localStorage.getItem('user'))
 
     const userAccount = user?.googleId
+
+    const { loading, error, data, refetch } = useQuery(GET_JOURNAL_BY_USER, {
+        variables: {
+          googleId: userAccount}
+      });
+
     const history = useHistory();
     console.log(user)
     
@@ -56,11 +78,16 @@ export default function Dashboard(props) {
             }
         })
     }
+    const authResult = new URLSearchParams(window.location.search); 
+    const refresh = authResult.get('refresh')
+    if(refresh) {
+        refetch();      
+    }
     return (
     <Layout>
-    <Box flex responsive direction="row-responsive" alignContent="between" gap="large" margin="large">
+    <Box flex responsive direction="row-responsive" alignContent="between" gap="large" margin="large" pad="small">
         <Box responsive margin={{left: "large"}} justify="between" flex direction="row-responsive" gap="small" size="xsmall" background="light-1" height="fit-content"  round pad="large">
-            <Avatar style={{textAlign: "center"}} size="xlarge" src={user.imageUrl} />
+            <Avatar style={{textAlign: "center"}} size="large" src={user.imageUrl} />
 
             <Box direction="column" justify="between" gap="xsmall">
             <Text size="xlarge" weight="bold" color="brand" textAlign="center">
@@ -79,7 +106,7 @@ export default function Dashboard(props) {
            
             </Box>
         </Box>
-        <Box direction="column" justify="center" width="large" align="center"  animation="slideRight"  round="small" background="light-1" flex elevation="small" >
+        {/* <Box direction="column" justify="center" width="large" align="center"  animation="slideRight"  round="small" background="light-1" flex elevation="small" >
             <Text size="large" margin="small" color="neutral-4"> Calendar</Text>
             <Clock  type="digital" hourLimit= "12" /> 
             <Calendar
@@ -91,7 +118,18 @@ export default function Dashboard(props) {
                 alert(date)
             }}
             />   
-        </Box>
+        </Box> */}
+        <Box className="dashcontainer" background="light-1">
+                    {data && data.journalsByuser.map((journal, index) => {
+                        const date = journal.createdAt
+                        return (
+                            <Box key={journal.id} border="all" >
+                                <Box onClick={() => {history.push('/editor/' + journal.id)}}  className={journal.completed ? "complete" : "incomplete"}></Box>
+                                <Text size="small">{dayjs(date).format("DD,MMM")}</Text>
+                            </Box>
+                        )
+                    })}
+                </Box>
 
     </Box>
     </Layout>

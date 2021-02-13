@@ -2,6 +2,7 @@
   "name": "365client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@apollo/client": "^3.3.9",
     "@testing-library/jest-dom": "^5.11.4",
@@ -22,6 +23,7 @@
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },
+  "proxy": "http://localhost:5000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

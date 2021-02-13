@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Editor from 'rich-markdown-editor';
-import {countBy, debounce} from 'lodash-es';
+import { debounce, } from 'lodash-es';
+import {Text} from 'grommet';
 import removeMd from 'remove-markdown';
 import _ from 'lodash-es';
 import Layout from '../Layout/Layout';
@@ -8,10 +9,30 @@ import * as dayjs from 'dayjs';
 import {gql, useMutation} from '@apollo/client';
 import {Box} from 'grommet';
 
-import { useParams } from "react-router";
+import {useQuery} from '@apollo/client';
+
+import { useHistory, useParams } from "react-router";
 
 import './editor.css';
 import { GlobalContext } from '../../contexts/GlobalContext/globalcontext';
+
+
+const Get_JOURNAL_BY_ID = gql`
+  query GetJournal($id: ID!, $googleId: String!) {
+    journal(id: $id, googleId: $googleId) {
+        content
+        completed
+        createdAt
+      }
+  }
+`
+const DELETE_JOURNAL = gql`
+  mutation DeleteJournal($id: ID!, $googleId: String!) {
+    deleteJournal(id: $id, googleId: $googleId ){
+      createdAt
+    }
+  }
+`
 
 const UPDATE_JOURNAL = gql`
   mutation UpdateJournal($id: String!, $content: String, $count: Float, $completed: Boolean) {
@@ -24,10 +45,10 @@ const UPDATE_JOURNAL = gql`
 
 const savedText = localStorage.getItem('saved');
 const exampleText = ``
-const defaultValue = savedText || exampleText;
+let defaultValue = savedText || exampleText;
 
 
-const FunctionMarkdownEditor = (props) => {
+const FunctionMarkdownEditor = () => {
   const [word, setWord] = useState("" || defaultValue)
   const [cleanWord, setCleanWord] = useState("");
   const [readOnly, setreadonly] = useState(false)
@@ -35,15 +56,39 @@ const FunctionMarkdownEditor = (props) => {
   const [dark, setDark] = useState(localStorage.getItem('dark') === "enabled")
   const [value, setValue]= useState(undefined);
 
-  const {journalList} = useContext(GlobalContext);
+  const user = JSON.parse(localStorage.getItem('user'))
+  
+  const userAccount = user?.googleId
 
-  //getting the query id
   let {id} = useParams();
 
+  const { loading, error, data } = useQuery(Get_JOURNAL_BY_ID, {
+    variables: {
+      id: id,
+      googleId: userAccount
+    }, onCompleted: (data) => {
+      const journal = data?.journal.content 
+      defaultValue = String(journal)
+      setValue(defaultValue)
+    }
+  });
+  const {journalList} = useContext(GlobalContext);
+
+
+  //getting the query id
+
+  
   const count = cleanWord.length
   const [updateJournal] = useMutation(UPDATE_JOURNAL, {
-    onCompleted:(data) => {console.log("Saved", data)}
+    onCompleted:(data) => {console.log("Saved", data);}
   });
+  //deleting the journal 
+  const history = useHistory();
+  const [deletejournal] = useMutation(DELETE_JOURNAL, {
+    onCompleted: () => {
+      console.log("deleted the data");
+      history.push('/dashboard?refresh=true')}
+  })
   useEffect(() => {
     if (count >= 1) {
       updateJournal({
@@ -108,7 +153,25 @@ const FunctionMarkdownEditor = (props) => {
     // console.log(keywordsCount)
   }
 
+  const DELETE = () => {
+    //delete mutation
+    //redirect to /dashboard
+    deletejournal({variables: {
+      id: id,
+      googleId: userAccount
+    }, 
+    // update: cache => {
+    //   const data = cache.readQuery({query: GET_JOURNAL_BY_USER});
+    //   data.items = data.items.filter(({id: itemId}) => itemId !== id);
+    //   cache.writeQuery({query: GET_JOURNAL_BY_USER}, data);
+    // }
+  })
+  }
+  // date
+  const date = data ? dayjs(data?.journal.createdAt) : new dayjs();
+
   const { body } = document;
+
 
   if (body) body.style.backgroundColor = dark ? "#181A1B" : "#FFF";
   return(
@@ -129,11 +192,17 @@ const FunctionMarkdownEditor = (props) => {
           <button type="button" onClick={fullscreeentoggle}>
             FullScreen
           </button>
+          <button type="button" onClick={DELETE}>
+            Delete journal
+          </button>
           <button type="button" onClick={removingMarkdown}>
             RemoveMarkdown
           </button>
           <br/>
             </div>
+            <Text color="dark-2" weight="normal"  textAlign="center">
+              {date.format('MMMM DD, YYYY')}
+            </Text>
             <Editor
           id="example"
           readOnly={readOnly}

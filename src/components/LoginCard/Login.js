@@ -1,13 +1,12 @@
-import React, { useContext, useReducer, useState } from 'react';
-import {Card, CardHeader, CardFooter, Button} from 'grommet';
-import {Google} from 'grommet-icons';
+import React, { useContext } from 'react';
+import {Card, CardHeader, CardFooter} from 'grommet';
 import { useHistory } from 'react-router-dom';
 import {AuthContext} from '../../contexts/AuthContext/AuthContext';
-import {Redirect} from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
-import {clientId} from '../../configs/configs'
 import { gql, useMutation } from '@apollo/client';
 
+
+const clientId =  process.env.REACT_APP_GOOGLE_CLIENT_ID
 
 const ADD_USER = gql`
   mutation AddUser($googleId: String!, $displayName: String!, $firstName: String!, $lastName: String!, $image: String! ){

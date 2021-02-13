@@ -3,6 +3,7 @@ import { Box } from "grommet";
 export default function AppHeader(props) {
   return (
     <Box
+      animation="fadeIn"
       tag="header"
       direction="row"
       align="center"

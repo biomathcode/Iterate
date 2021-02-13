@@ -51,6 +51,12 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   const {isLoggedIn} = useContext(GlobalContext)
+
+  const [refresh, setRefresh] = useState(false);
+
+  const toggleRefresh = ()=> {
+    setRefresh(!refresh);
+  }
   return (
     <Grommet theme={theme} themeMode={darkMode? "dark": "light"} full>
       <Router>
@@ -96,10 +102,10 @@ function App() {
                   <PrivacyPage/>
                 </Route>
                 <Route path="/Dashboard">
-                  <Dashboard/>
+                  <Dashboard />
                 </Route>
                 <Route path="/Editor/:id">
-                  <MarkdownEditor/>
+                  <MarkdownEditor />
                 </Route>
             </Switch>
                   
