@@ -10,7 +10,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from 'react-router-dom';
 import MarkdownEditor from "./components/Editor/Editor";
 
@@ -51,12 +50,6 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   const {isLoggedIn} = useContext(GlobalContext)
-
-  const [refresh, setRefresh] = useState(false);
-
-  const toggleRefresh = ()=> {
-    setRefresh(!refresh);
-  }
   return (
     <Grommet theme={theme} themeMode={darkMode? "dark": "light"} full>
       <Router>

@@ -6,7 +6,7 @@ import { GoogleLogin } from 'react-google-login';
 import { gql, useMutation } from '@apollo/client';
 
 
-const clientId =  process.env.REACT_APP_GOOGLE_CLIENT_ID
+const clientId =  "929067087700-k2oomkroljojq9l3cepbeia8v8qgibe9.apps.googleusercontent.com"
 
 const ADD_USER = gql`
   mutation AddUser($googleId: String!, $displayName: String!, $firstName: String!, $lastName: String!, $image: String! ){
