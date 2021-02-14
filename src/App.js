@@ -7,7 +7,7 @@ import theme from "./theme";
 import Dashboard from "./components/Dashboard/Dashboard";
 import LandingPage from "./components/LandingPage/LandingPage";
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Switch,
   Route,
 } from 'react-router-dom';
@@ -43,7 +43,19 @@ const PrivacyPage = () => (
     </Heading>
   </Box>
 )
-
+const NoMatch = () => (
+  <Box >
+    <Box>
+      <Heading> 404: Seems you are lost</Heading>  
+      <Box direction="row" justify="between" gap="small">
+      <Anchor href="/" label="home"/> 
+      <Anchor href="/Dashboard" label="Dashboard"/> 
+      </Box>
+      
+      <Text> Click on the link above to get to home</Text>
+    </Box>
+  </Box>
+)
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -52,7 +64,7 @@ function App() {
   const {isLoggedIn} = useContext(GlobalContext)
   return (
     <Grommet theme={theme} themeMode={darkMode? "dark": "light"} full>
-      <Router>
+      <BrowserRouter>
   <ApolloProvider client={client}>
   <AuthProvider>
     <GlobalProvider>
@@ -88,6 +100,7 @@ function App() {
                 <Route path="/Privacy" component={PrivacyPage}/>
                 <Route path="/Dashboard" component={Dashboard}/>
                 <Route path="/Editor/:id" component={MarkdownEditor }/>
+                <Route path="*" component={NoMatch} />
             </Switch>
                   
               </Box>
@@ -99,7 +112,10 @@ function App() {
               >
               
                 <Nav direction="column">
-                  <Anchor href={isLoggedIn? "/" : "/Dashboard"} label={isLoggedIn? "Home": "Dashboard"} />
+                {isLoggedIn? 
+                <Anchor href="/" label="Home"/> : <Anchor href="/Dashboard" label="Dashboard"/>
+                }
+
                   <Anchor href="/About" label="About" />
                   <Anchor href="/Contact" label="Contact" />
                   <Anchor href="/Privacy" label="Privacy Policy" />
@@ -122,7 +138,7 @@ function App() {
       </GlobalProvider>
     </AuthProvider>
   </ApolloProvider>   
-      </Router>
+      </BrowserRouter>
 
     </Grommet>
   );
