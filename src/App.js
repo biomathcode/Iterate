@@ -82,24 +82,12 @@ function App() {
               <Box flex align="center" justify="center" margin={{bottom: "medium"}} 
               >
               <Switch>
-                <Route exact path="/">
-                  <LandingPage resposiveSize={size}/>
-                </Route>
-                <Route path="/About">
-                  <About/>
-                </Route>
-                <Route path="/Contact">
-                  <Contact/>
-                </Route>
-                <Route path="/Privacy">
-                  <PrivacyPage/>
-                </Route>
-                <Route path="/Dashboard">
-                  <Dashboard />
-                </Route>
-                <Route path="/Editor/:id">
-                  <MarkdownEditor />
-                </Route>
+                <Route exact path="/" component={LandingPage}/>
+                <Route path="/About" component={About}/>              
+                <Route path="/Contact" component={Contact}/>                
+                <Route path="/Privacy" component={PrivacyPage}/>
+                <Route path="/Dashboard" component={Dashboard}/>
+                <Route path="/Editor/:id" component={MarkdownEditor }/>
             </Switch>
                   
               </Box>
@@ -111,7 +99,7 @@ function App() {
               >
               
                 <Nav direction="column">
-                  <Anchor href={isLoggedIn? "/" : "/dashboard"} label={isLoggedIn? "Home": "Dashboard"} />
+                  <Anchor href={isLoggedIn? "/" : "/Dashboard"} label={isLoggedIn? "Home": "Dashboard"} />
                   <Anchor href="/About" label="About" />
                   <Anchor href="/Contact" label="Contact" />
                   <Anchor href="/Privacy" label="Privacy Policy" />
