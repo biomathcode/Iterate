@@ -6,7 +6,7 @@ import { GoogleLogin } from 'react-google-login';
 import { gql, useMutation } from '@apollo/client';
 
 
-const clientId =  "929067087700-k2oomkroljojq9l3cepbeia8v8qgibe9.apps.googleusercontent.com"
+const client =  process.env.REACT_APP_GOOGLE_CLIENT_ID || "929067087700-k2oomkroljojq9l3cepbeia8v8qgibe9.apps.googleusercontent.com"
 
 const ADD_USER = gql`
   mutation AddUser($googleId: String!, $displayName: String!, $firstName: String!, $lastName: String!, $image: String! ){
@@ -56,7 +56,7 @@ export  const Login = (props) => {
                 <CardHeader pad="medium" >Login to start Your journal</CardHeader>
             <CardFooter flex  pad={{horizontal: "small"}} background="light-2">   
              <GoogleLogin
-            clientId={clientId}
+            clientId={client}
             buttonText="Login with google"
             onSuccess={responseSuccessGoogle}
             onFailure={responseErrorGoogle}

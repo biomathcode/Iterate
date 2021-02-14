@@ -49,7 +49,7 @@ const NoMatch = () => (
       <Heading> 404: Seems you are lost</Heading>  
       <Box direction="row" justify="between" gap="small">
       <Anchor href="/" label="home"/> 
-      <Anchor href="/Dashboard" label="Dashboard"/> 
+      <Anchor href="/dashboard" label="Dashboard"/> 
       </Box>
       
       <Text> Click on the link above to get to home</Text>
@@ -95,11 +95,11 @@ function App() {
               >
               <Switch>
                 <Route exact path="/" component={LandingPage}/>
-                <Route path="/About" component={About}/>              
-                <Route path="/Contact" component={Contact}/>                
-                <Route path="/Privacy" component={PrivacyPage}/>
-                <Route path="/Dashboard" component={Dashboard}/>
-                <Route path="/Editor/:id" component={MarkdownEditor }/>
+                <Route path="/about" component={About}/>              
+                <Route path="/contact" component={Contact}/>                
+                <Route path="/privacy" component={PrivacyPage}/>
+                <Route path="/dashboard" component={Dashboard}/>
+                <Route path="/editor/:id" component={MarkdownEditor }/>
                 <Route path="*" component={NoMatch} />
             </Switch>
                   
@@ -116,9 +116,9 @@ function App() {
                 <Anchor href="/" label="Home"/> : <Anchor href="/Dashboard" label="Dashboard"/>
                 }
 
-                  <Anchor href="/About" label="About" />
-                  <Anchor href="/Contact" label="Contact" />
-                  <Anchor href="/Privacy" label="Privacy Policy" />
+                  <Anchor href="/about" label="About" />
+                  <Anchor href="/contact" label="Contact" />
+                  <Anchor href="/privacy" label="Privacy Policy" />
                   <Text color="black-4">Follow Us on</Text>
                   <Box direction="row">
                     <Anchor icon={<Facebook/>} href="/" />
