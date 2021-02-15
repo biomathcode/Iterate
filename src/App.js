@@ -10,6 +10,7 @@ import {
   BrowserRouter,
   Switch,
   Route,
+  Link
 } from 'react-router-dom';
 import MarkdownEditor from "./components/Editor/Editor";
 
@@ -113,12 +114,24 @@ function App() {
               
                 <Nav direction="column">
                 {isLoggedIn? 
-                <Anchor href="/" label="Home"/> : <Anchor href="/dashboard" label="Dashboard"/>
-                }
+                <Link to ="/">
+                  <Anchor href="/" label="Home"/>
+                </Link>
+                 : <Link to="/dashboard">
+                 <Anchor href="/dashboard" label="Dashboard"/>
+                 </Link> 
 
-                  <Anchor href="/about" label="About" />
+                }
+                <Link to='/about'>
+                <Anchor href="/about" label="About" />
+
+                </Link>
+                <Link to="/contact">
                   <Anchor href="/contact" label="Contact" />
+                </Link>
+                <Link to="/privacy">
                   <Anchor href="/privacy" label="Privacy Policy" />
+                </Link>
                   <Text color="black-4">Follow Us on</Text>
                   <Box direction="row">
                     <Anchor icon={<Facebook/>} href="/" />
