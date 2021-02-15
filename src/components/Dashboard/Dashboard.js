@@ -97,7 +97,7 @@ export default function Dashboard() {
             <Button
             size="small" 
             color="neutral-1" 
-            label="New Journal"
+            label={!mutationLoading ? "New Journal": "adding.." }
             icon={ <Add/>  }    
             tip="Add a new Journal"
             onClick={AddJournal}

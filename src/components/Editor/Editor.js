@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Editor from 'rich-markdown-editor';
+import {Link} from 'react-router-dom';
 import { debounce, } from 'lodash-es';
-import {Button, Text, Anchor,Menu, Box} from 'grommet';
+import {Button, Text, Menu, Box} from 'grommet';
 import removeMd from 'remove-markdown';
 import _ from 'lodash-es';
 import Layout from '../Layout/Layout';
@@ -76,9 +77,6 @@ const FunctionMarkdownEditor = () => {
   });
   const {journalList} = useContext(GlobalContext);
 
-
-  //getting the query id
-
   
   const count = cleanWord.length
   const [updateJournal] = useMutation(UPDATE_JOURNAL, {
@@ -111,8 +109,9 @@ const FunctionMarkdownEditor = () => {
     setTemplate(!template);
   }
   const handleToggleDark = () => {
-    setDark(!dark)
-    localStorage.setItem("dark", dark ? "enabled" : "disabled");
+    alert('We are working on themes')
+    // setDark(!dark)
+    // localStorage.setItem("dark", dark ? "enabled" : "disabled");
   }
   const fullscreeentoggle = () => {
     if(!document.fullscreenElement) {
@@ -177,13 +176,13 @@ const FunctionMarkdownEditor = () => {
 
   if (body) body.style.backgroundColor = dark ? "#181A1B" : "#FFF";
   return(
-    <Box width="medium">
+    <Box width="large">
     <Box direction="row" justify="between" gap="large" >
     <Box direction="column" margin="small">
-              <Anchor href="/dashboard" >
+              <Link to="/dashboard" >
                 <LinkPrevious size="small"/>
                 <Text color="dark-2" weight="normal">Dashboard</Text>
-              </Anchor>
+              </Link>
       </Box>
       <Box  style={{zIndex: '1'}}>
       <Menu
@@ -201,9 +200,23 @@ const FunctionMarkdownEditor = () => {
       </Box>
     </Box>
     <Box>
+    <Box  direction="row" justify="between" gap="medium">
     <Text color="dark-2" weight="normal" textAlign="center">
               {date.format('MMMM DD, YYYY')}
             </Text>
+      <Button  type="button" label={saved? "saving":"commit"} size="small" color="green"  onClick={() => {
+    setSaved(true)
+    updateJournal({
+      variables: {
+        id: id,
+        content: word,
+        count: count,
+        completed: true
+      }
+    })
+  }} />
+    </Box>
+    
             
             <Editor
           id="example"
@@ -254,26 +267,10 @@ const FunctionMarkdownEditor = () => {
         //       }, Math.random() * 500);
         //     });
         //   }}
-          dark={dark}
           autoFocus
         />
 
     </Box>
-    <Box width="small" direction="row" justify="center">
-    <Button  type="button" label={saved? "saving":"commit"} size="small" color="green"  onClick={() => {
-          setSaved(true)
-           updateJournal({
-            variables: {
-              id: id,
-              content: word,
-              count: count,
-              completed: true
-            }
-          })
-        }} />
-
-    </Box>
-        
     </Box>
   )
 }
@@ -282,7 +279,7 @@ const MarkdownEditor = () => {
     return(
         <Layout>
             <Box direction="row-responsive" justify="center">
-                <FunctionMarkdownEditor width="small"/>
+                <FunctionMarkdownEditor className="containerEditor" />
             </Box>
             
         </Layout>

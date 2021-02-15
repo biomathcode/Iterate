@@ -60,7 +60,7 @@ const Layout = ({ children }) => {
         <Box margin="small" >
           
         </Box>
-        <Main margin={{left: "small"}} height={{ min: "100%" }}>{children}</Main>
+        <Main  height={{ min: "100%" }}>{children}</Main>
       </Box>
     </>
   );

@@ -1,3 +1,16 @@
+.containerEditor{
+  max-width: 560px;
+  min-height: 80%;
+}
+
+@media screen and (max-width: 360px){
+  .containerEditor {
+    max-width: 300px;
+    min-height: 80%;
+  }
+}
+
+
 .editorContainer {
     font: var(--base-font-weight) var(--base-font-size) var(--base-font-family), sans-serif;
     color: var(--base-color);
