@@ -42,7 +42,7 @@ const LandingPage = ({resposiveSize}) => {
                 </Box>
                 <Box>
                     <Heading color="black" level="2" size="medium" style={{textDecoration: "underline", textDecorationColor: "greenyellow"}}>
-                        Built for Journaling
+                        Made for Journaling
                     </Heading>
                     <Button brand label="Get Started"  onClick={() => setShow(true)}/>
                 </Box>
