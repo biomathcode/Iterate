@@ -115,22 +115,21 @@ function App() {
                 <Nav direction="column">
                 {isLoggedIn? 
                 <Link to ="/">
-                  <Anchor href="/" label="Home"/>
+                  <Text>Home</Text>
                 </Link>
                  : <Link to="/dashboard">
-                 <Anchor href="/dashboard" label="Dashboard"/>
+                 <Text>Dashboard</Text>
                  </Link> 
 
                 }
                 <Link to='/about'>
-                <Anchor href="/about" label="About" />
-
+                <Text>About</Text>
                 </Link>
                 <Link to="/contact">
-                  <Anchor href="/contact" label="Contact" />
+                  <Text>Contact</Text>
                 </Link>
                 <Link to="/privacy">
-                  <Anchor href="/privacy" label="Privacy Policy" />
+                  <Text>Privacy Policy</Text>
                 </Link>
                   <Text color="black-4">Follow Us on</Text>
                   <Box direction="row">

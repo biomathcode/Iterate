@@ -21,7 +21,8 @@ const LandingPage = ({resposiveSize}) => {
           onClickOutside={() => setShow(false)}
         >
           <Button icon={<Close/>} onClick={() => setShow(false)} />
-          <Login/>
+            <Login/>
+          
         </Layer>
       )}
             <Stack anchor="bottom-right" >
