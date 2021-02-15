@@ -42,6 +42,13 @@ const MainNavigation = () => {
   )
   
 }
+// //<Box elevation="small" style={{zIndex: 1}} >
+// <Button
+// onClickCapture={toggle}
+// icon={!open ? <List /> : <Close />}
+
+// />
+// </Box>
 
 const Layout = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -51,24 +58,7 @@ const Layout = ({ children }) => {
     <>
       <Box fill direction="row" height={{ min: "100%" }} animation="fadeIn" >
         <Box margin="small" >
-          <Box elevation="small" style={{zIndex: 1}} >
-            <Button
-              onClickCapture={toggle}
-              icon={!open ? <List /> : <Close />}
-              
-            />
-          </Box>
-          {open && (
-            <Sidebar
-              margin={{top: "large"}}
-              style={{ zIndex: "1" }}
-              background="light-2"
-              header={<SidebarHeader />}
-              footer={<SidebarFooter />}
-            >
-              <MainNavigation />
-            </Sidebar>
-          )}
+          
         </Box>
         <Main margin={{left: "small"}} height={{ min: "100%" }}>{children}</Main>
       </Box>

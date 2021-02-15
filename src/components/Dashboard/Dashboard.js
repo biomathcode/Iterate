@@ -85,51 +85,37 @@ export default function Dashboard() {
     }
     return (
     <Layout>
-    <Box flex responsive direction="row-responsive" alignContent="between" gap="large" margin="large" pad="small">
-        <Box responsive margin={{left: "large"}} justify="between" flex direction="row-responsive" gap="small" size="xsmall" background="light-1" height="fit-content"  round pad="large">
-            <Avatar style={{textAlign: "center"}} size="large" src={user.imageUrl} />
-
-            <Box direction="column" justify="between" gap="xsmall">
-            <Text size="xlarge" weight="bold" color="brand" textAlign="center">
+    <Box flex responsive  direction="row-responsive" alignContent="around" gap="large" pad="small">
+        <Box  height="small" justify="around" flex direction="row-responsive" gap="small"  background="light-1" round pad="large">
+        <Box responsive size="small" direction="row" justify="around" gap="small">
+            <Avatar size="medium"  src={user.imageUrl} />
+            <Text size="large" weight="bold" color="brand" textAlign="center">
                Hello, {user.name}
             </Text>
-            <Box pad="large">
+        </Box>
+        <Box direction="column" justify="between" gap="xsmall" margin={{top: 'small'}} pad="large">
             <Button
             size="small" 
             color="neutral-1" 
             label="New Journal"
-            icon={ <Add/>  } 
+            icon={ <Add/>  }    
             tip="Add a new Journal"
             onClick={AddJournal}
             />
-            </Box>
-           
-            </Box>
+
         </Box>
-        {/* <Box direction="column" justify="center" width="large" align="center"  animation="slideRight"  round="small" background="light-1" flex elevation="small" >
-            <Text size="large" margin="small" color="neutral-4"> Calendar</Text>
-            <Clock  type="digital" hourLimit= "12" /> 
-            <Calendar
-            size="small"
-            daysOfWeek={true}
-            background="brand"
-            date={(new Date()).toISOString()}
-            onSelect={(date) => {
-                alert(date)
-            }}
-            />   
-        </Box> */}
+        </Box>
         <Box className="dashcontainer" background="light-1">
-                    {data && data.journalsByuser.map((journal, index) => {
-                        const date = journal.createdAt
-                        return (
-                            <Box key={journal.id} border="all" >
-                                <Box onClick={() => {history.push('/editor/' + journal.id)}}  className={journal.completed ? "complete" : "incomplete"}></Box>
-                                <Text size="small">{dayjs(date).format("DD,MMM")}</Text>
-                            </Box>
-                        )
-                    })}
-                </Box>
+            {data && data.journalsByuser.map((journal, index) => {
+                const date = journal.createdAt
+                return (
+                    <Box key={journal.id}>
+                        <Box onClick={() => {history.push('/editor/' + journal.id)}}  className={journal.completed ? "complete" : "incomplete"}></Box>
+                        <Text size="small">{dayjs(date).format("DD,MMM")}</Text>
+                    </Box>
+                )
+            })}
+        </Box>
 
     </Box>
     </Layout>

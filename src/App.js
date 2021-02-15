@@ -113,7 +113,7 @@ function App() {
               
                 <Nav direction="column">
                 {isLoggedIn? 
-                <Anchor href="/" label="Home"/> : <Anchor href="/Dashboard" label="Dashboard"/>
+                <Anchor href="/" label="Home"/> : <Anchor href="/dashboard" label="Dashboard"/>
                 }
 
                   <Anchor href="/about" label="About" />

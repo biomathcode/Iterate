@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Editor from 'rich-markdown-editor';
 import { debounce, } from 'lodash-es';
-import {Text} from 'grommet';
+import {Button, Text, Anchor,Menu, Box} from 'grommet';
 import removeMd from 'remove-markdown';
 import _ from 'lodash-es';
 import Layout from '../Layout/Layout';
 import * as dayjs from 'dayjs';
 import {gql, useMutation} from '@apollo/client';
-import {Box} from 'grommet';
+
 
 import {useQuery} from '@apollo/client';
 
@@ -15,6 +15,7 @@ import { useHistory, useParams } from "react-router";
 
 import './editor.css';
 import { GlobalContext } from '../../contexts/GlobalContext/globalcontext';
+import { LinkPrevious, More } from 'grommet-icons';
 
 
 const Get_JOURNAL_BY_ID = gql`
@@ -49,12 +50,13 @@ let defaultValue = savedText || exampleText;
 
 
 const FunctionMarkdownEditor = () => {
-  const [word, setWord] = useState("" || defaultValue)
+  const [word, setWord] = useState(defaultValue)
   const [cleanWord, setCleanWord] = useState("");
   const [readOnly, setreadonly] = useState(false)
   const [template, setTemplate] = useState(false)
   const [dark, setDark] = useState(localStorage.getItem('dark') === "enabled")
   const [value, setValue]= useState(undefined);
+  const [saved, setSaved] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user'))
   
@@ -80,7 +82,7 @@ const FunctionMarkdownEditor = () => {
   
   const count = cleanWord.length
   const [updateJournal] = useMutation(UPDATE_JOURNAL, {
-    onCompleted:(data) => {console.log("Saved", data);}
+    onCompleted:(data) => {console.log("Saved", data);setSaved(false)}
   });
   //deleting the journal 
   const history = useHistory();
@@ -175,34 +177,34 @@ const FunctionMarkdownEditor = () => {
 
   if (body) body.style.backgroundColor = dark ? "#181A1B" : "#FFF";
   return(
-    <div>
-            <div>
-                <button type="button" onClick={handleToggleReadOnly}>
-                    {readOnly ?"Editable" : "Read-only"}
-                </button>
-                <button type="button" onClick={handleToggleDark}>
-            {dark ? "Switch to Light" : "Switch to Dark"}
-          </button>{" "}
-          <button type="button" onClick={handleToggleTemplate}>
-            {template ? "Switch to Document" : "Switch to Template"}
-          </button>{" "}
-          <button type="button" onClick={handleUpdateValue}>
-            Update value
-          </button>
-          <button type="button" onClick={fullscreeentoggle}>
-            FullScreen
-          </button>
-          <button type="button" onClick={DELETE}>
-            Delete journal
-          </button>
-          <button type="button" onClick={removingMarkdown}>
-            RemoveMarkdown
-          </button>
-          <br/>
-            </div>
-            <Text color="dark-2" weight="normal"  textAlign="center">
+    <Box width="medium">
+    <Box direction="row" justify="between" gap="large" >
+    <Box direction="column" margin="small">
+              <Anchor href="/dashboard" >
+                <LinkPrevious size="small"/>
+                <Text color="dark-2" weight="normal">Dashboard</Text>
+              </Anchor>
+      </Box>
+      <Box  style={{zIndex: '1'}}>
+      <Menu
+        dropProps={{ align: { top: 'bottom', right: 'right' } }}
+        icon={<More size="medium"/>}
+        items={[
+          { label: 'ReadMode', onClick: () => { handleToggleReadOnly()} },
+          { label: 'DarkMode', onClick: () => { handleToggleDark()} },
+          { label: 'Update', onClick: () => {handleUpdateValue()} },
+          { label: 'FullScreen', onClick: () => {fullscreeentoggle()} },
+          {label: 'Delete', onClick: () => {DELETE()}},
+          {label: 'Removemarkdown', onClick: () => {removingMarkdown()}}
+        ]}
+      />
+      </Box>
+    </Box>
+    <Box>
+    <Text color="dark-2" weight="normal" textAlign="center">
               {date.format('MMMM DD, YYYY')}
             </Text>
+            
             <Editor
           id="example"
           readOnly={readOnly}
@@ -210,7 +212,7 @@ const FunctionMarkdownEditor = () => {
           className="editorContainer"
           value={value}
           template={template}
-          defaultValue={defaultValue}
+          defaultValue={loading? "Loading": defaultValue}
           scrollTo={window.location.hash}
           handleDOMEvents={{
             focus: () => console.log("FOCUS"),
@@ -255,7 +257,24 @@ const FunctionMarkdownEditor = () => {
           dark={dark}
           autoFocus
         />
-    </div>
+
+    </Box>
+    <Box width="small" direction="row" justify="center">
+    <Button  type="button" label={saved? "saving":"commit"} size="small" color="green"  onClick={() => {
+          setSaved(true)
+           updateJournal({
+            variables: {
+              id: id,
+              content: word,
+              count: count,
+              completed: true
+            }
+          })
+        }} />
+
+    </Box>
+        
+    </Box>
   )
 }
 
