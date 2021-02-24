@@ -25,7 +25,13 @@ const ADD_USER = gql`
 export  const Login = (props) => {
     const {UserLogin} = useContext(AuthContext);
     const history = useHistory();
-    const [updateUser] = useMutation(ADD_USER)
+    const [updateUser] = useMutation(ADD_USER, {
+        onCompleted: (data) => {
+            if(data) {
+                history.push('/dashboard')
+            }
+        }
+    })
 
 
     const responseSuccessGoogle = async (response) => {
@@ -34,18 +40,21 @@ export  const Login = (props) => {
             token: response?.tokenId,
             user: response?.profileObj
         }
-        UserLogin(newUser);
         // authContext.isLoggedIn = true
         // authContext.token = response?.tokenId
         // authContext.user = response?.profileObj
-        updateUser({variables: {
+        await updateUser({variables: {
             googleId: response.profileObj.googleId, 
             displayName: response.profileObj.name,
             firstName: response.profileObj.givenName, 
             lastName: response.profileObj.familyName, 
             image: response.profileObj.imageUrl,
         }})
-        history.push('/dashboard')
+        console.log('add this')
+
+        await UserLogin(newUser);
+
+        
     }
     const responseErrorGoogle = (res) => {
         console.log(res);

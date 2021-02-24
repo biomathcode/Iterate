@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import Editor from 'rich-markdown-editor';
 import {Link} from 'react-router-dom';
 import { debounce, } from 'lodash-es';
-import {Button, Text, Menu, Box} from 'grommet';
+import {Button, Text, Menu, Box, Markdown} from 'grommet';
 import removeMd from 'remove-markdown';
 import _ from 'lodash-es';
 import Layout from '../Layout/Layout';
@@ -12,12 +12,13 @@ import {gql, useMutation} from '@apollo/client';
 
 import {useQuery} from '@apollo/client';
 
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router-dom";
 
 import './editor.css';
 import { GlobalContext } from '../../contexts/GlobalContext/globalcontext';
 import { LinkPrevious, More } from 'grommet-icons';
 
+import ReactToPrint from 'react-to-print';
 
 const Get_JOURNAL_BY_ID = gql`
   query GetJournal($id: ID!, $googleId: String!) {
@@ -51,6 +52,9 @@ let defaultValue = savedText || exampleText;
 
 
 const FunctionMarkdownEditor = () => {
+  let {id} = useParams();
+  console.log(id);
+
   const [word, setWord] = useState(defaultValue)
   const [cleanWord, setCleanWord] = useState("");
   const [readOnly, setreadonly] = useState(false)
@@ -60,10 +64,11 @@ const FunctionMarkdownEditor = () => {
   const [saved, setSaved] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user'))
+
+  const componentRef = useRef();
   
   const userAccount = user?.googleId
 
-  let {id} = useParams();
 
   const { loading, error, data } = useQuery(Get_JOURNAL_BY_ID, {
     variables: {
@@ -101,6 +106,11 @@ const FunctionMarkdownEditor = () => {
       })
     }
   }, [count]);
+
+  const handlePdf = async () => {
+    
+
+  }
 
   const handleToggleReadOnly = () => {
     setreadonly(!readOnly);
@@ -194,12 +204,17 @@ const FunctionMarkdownEditor = () => {
           { label: 'Update', onClick: () => {handleUpdateValue()} },
           { label: 'FullScreen', onClick: () => {fullscreeentoggle()} },
           {label: 'Delete', onClick: () => {DELETE()}},
-          {label: 'Removemarkdown', onClick: () => {removingMarkdown()}}
+          {label: 'Removemarkdown', onClick: () => {removingMarkdown()}},
+          {label:"PDF", onClick: () => {handlePdf()}}
         ]}
       />
       </Box>
     </Box>
     <Box>
+    <ReactToPrint
+        trigger={() => <button>Print this out!</button>}
+        content={() => componentRef.current}
+      />
     <Box  direction="row" justify="between" gap="medium">
     <Text color="dark-2" weight="normal" textAlign="center">
               {date.format('MMMM DD, YYYY')}
@@ -217,8 +232,10 @@ const FunctionMarkdownEditor = () => {
   }} />
     </Box>
     
+    
             
-            <Editor
+    <Editor
+      ref={componentRef}
           id="example"
           readOnly={readOnly}
           readOnlyWriteCheckboxes
@@ -281,7 +298,6 @@ const MarkdownEditor = () => {
             <Box direction="row-responsive" justify="center">
                 <FunctionMarkdownEditor className="containerEditor" />
             </Box>
-            
         </Layout>
     )
 

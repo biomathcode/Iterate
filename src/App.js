@@ -100,6 +100,7 @@ function App() {
                 <Route path="/contact" component={Contact}/>                
                 <Route path="/privacy" component={PrivacyPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
+                <Route path="/Mobile/editor" component={MarkdownEditor }/>
                 <Route path="/editor/:id" component={MarkdownEditor }/>
                 <Route path="*" component={NoMatch} />
             </Switch>

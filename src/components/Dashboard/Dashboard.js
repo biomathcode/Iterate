@@ -5,9 +5,9 @@ import {GlobalContext} from '../../contexts/GlobalContext/globalcontext';
 
 import {useParams} from 'react-router-dom';
 
-import {Box, Clock, Calendar,Button, Avatar, Text, Heading, } from 'grommet';
+import {Box,Button, Avatar, Text } from 'grommet';
 import Layout from '../Layout/Layout';
-import { Add,BladesHorizontal } from 'grommet-icons';
+import { Add } from 'grommet-icons';
 import { useHistory } from 'react-router-dom';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import './Dashboard.css';
@@ -86,7 +86,7 @@ export default function Dashboard() {
     return (
     <Layout>
     <Box flex responsive  direction="row-responsive" alignContent="around" gap="large" pad="small">
-        <Box  height="small" justify="around" flex direction="row-responsive" gap="small"  background="light-1" round pad="large">
+        <Box  height="small" justify="around" flex direction="row-responsive" gap="small"   round pad="large">
         <Box responsive size="small" direction="row" justify="around" gap="small">
             <Avatar size="medium"  src={user.imageUrl} />
             <Text size="large" weight="bold" color="brand" textAlign="center">
@@ -105,7 +105,7 @@ export default function Dashboard() {
 
         </Box>
         </Box>
-        <Box className="dashcontainer" background="light-1">
+        <Box className="dashcontainer">
             {data && data.journalsByuser.map((journal, index) => {
                 const date = journal.createdAt
                 return (
