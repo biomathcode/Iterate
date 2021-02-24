@@ -89,7 +89,6 @@ function App() {
                   onClick={() => setShowSidebar(!showSidebar)}
                 />
               </Box>
-              
             </AppHeader>
             <Box direction="row" flex overflow={{ horizontal: "hidden" }}>
               <Box flex align="center" justify="center" margin={{bottom: "medium"}} 
@@ -100,13 +99,11 @@ function App() {
                 <Route path="/contact" component={Contact}/>                
                 <Route path="/privacy" component={PrivacyPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
-                <Route path="/Mobile/editor" component={MarkdownEditor }/>
+                <Route path="/mobile" component={MarkdownEditor }/>
                 <Route path="/editor/:id" component={MarkdownEditor }/>
                 <Route path="*" component={NoMatch} />
             </Switch>
-                  
               </Box>
-              
               <AppSidebar
                 size={size}
                 showSidebar={showSidebar}
@@ -128,6 +125,9 @@ function App() {
                 </Link>
                 <Link to="/contact">
                   <Text>Contact</Text>
+                </Link>
+                <Link to="/mobile">
+                  <Text>mobile</Text>
                 </Link>
                 <Link to="/privacy">
                   <Text>Privacy Policy</Text>
